@@ -4,12 +4,413 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Moodify AI — Deep Learning Emotion & Sentiment Intelligence</title>
+  <meta name="description" content="State-of-the-art AI emotion recognition engine powered by Bidirectional Gated Recurrent Units (BiGRU). Analyze sentiments and micro-emotions in real-time.">
+  <meta name="keywords" content="emotion analysis, sentiment analysis, NLP, deep learning, BiGRU, natural language processing">
+  <meta property="og:title" content="Moodify AI — Emotion Intelligence Engine">
+  <meta property="og:description" content="Real-time multi-dimensional emotion detection and text sentiment analysis powered by BiGRU neural networks.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="/static/logo.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-  <h1>"emotion Predictor</h1>
+  <!-- Ambient Atmospheric Glowing Orbs -->
+  <div class="ambient-glow-wrapper" aria-hidden="true">
+    <div class="ambient-blob ambient-blob-1" id="ambientBlob1"></div>
+    <div class="ambient-blob ambient-blob-2" id="ambientBlob2"></div>
+    <div class="ambient-blob ambient-blob-3" id="ambientBlob3"></div>
+  </div>
+  <div class="ambient-grid" aria-hidden="true"></div>
 
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Header Navigation -->
+    <header class="app-header" role="banner">
+      <div class="brand-wrapper">
+        <div class="brand-logo-frame">
+          <img src="/static/logo.jpg" alt="Moodify AI Logo" id="brandLogoImg">
+        </div>
+        <div class="brand-text">
+          <h1>
+            Moodify AI
+            <span class="brand-badge">BiGRU Engine</span>
+          </h1>
+          <p>Deep Learning Sentiment & Emotional Diagnostics</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="model-status-pill" id="modelStatusPill" title="Backend Server & Model Status">
+          <span class="status-dot pulsing" id="statusDot"></span>
+          <span id="statusText">Connecting...</span>
+        </div>
+
+        <button class="icon-btn" id="soundToggleBtn" title="Toggle Audio Chimes Feedback" aria-label="Toggle Sound">
+          <span id="soundIcon">🔊</span>
+          <span id="soundLabel">Sound On</span>
+        </button>
+
+        <button class="icon-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+          <span id="themeIcon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-pill">
+        <span class="hero-pill-sparkle">✨</span>
+        <span>Bidirectional Recurrent Neural Network Architecture</span>
+      </div>
+      <h2>
+        Decode the Emotional Pulse of <span class="hero-gradient-text" id="heroAccentText">Human Language</span>
+      </h2>
+      <p>
+        Analyze real-time emotional resonance across 6 affective states: Joy, Sadness, Love, Anger, Fear, and Surprise with calibrated neural probability distributions.
+      </p>
+    </section>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid" role="main">
+
+      <!-- LEFT COLUMN: INPUT STATION -->
+      <section class="input-panel">
+        <div class="glass-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <div class="card-icon-tag">✍️</div>
+              <div>
+                <h3>Text Emotion Input</h3>
+                <span class="card-subtext">Type, paste, or dictate any sentence or message</span>
+              </div>
+            </div>
+            <button class="mini-action-btn" id="randomPromptBtn" title="Load a Random Sample">
+              <span>🎲</span> Random Sample
+            </button>
+          </div>
+
+          <!-- Input Area -->
+          <div class="textarea-container" id="textareaWrapper">
+            <textarea
+              id="emotionTextInput"
+              class="emotion-textarea"
+              placeholder="How are you feeling, or what statement would you like to analyze? (e.g., 'I cannot express how grateful and ecstatic I am for this moment!')"
+              maxlength="2000"
+              rows="4"
+              aria-label="Text to analyze for emotion"
+            ></textarea>
+
+            <div class="textarea-footer-bar">
+              <div class="token-stats">
+                <span class="stat-item"><strong id="charCount">0</strong> / 2000 chars</span>
+                <span class="stat-item"><strong id="wordCount">0</strong> words</span>
+                <span class="stat-item" title="Sequence token capacity for BiGRU (Max 50)">
+                  Seq: <strong id="tokenCount">0</strong>/50
+                  <span class="token-capacity-bar">
+                    <span class="token-capacity-fill" id="tokenCapacityFill"></span>
+                  </span>
+                </span>
+              </div>
+
+              <div class="input-quick-actions">
+                <button class="mini-action-btn" id="voiceInputBtn" title="Speech to Text (Microphone)">
+                  <span id="micIcon">🎙️</span> <span id="micText">Voice</span>
+                </button>
+                <button class="mini-action-btn" id="pasteInputBtn" title="Paste from Clipboard">
+                  📋 Paste
+                </button>
+                <button class="mini-action-btn" id="clearInputBtn" title="Clear Text">
+                  ✕ Clear
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Emotion Presets -->
+          <div class="presets-section" style="margin-top: 1.25rem;">
+            <div class="presets-label">
+              <span>Try Emotional Archetypes:</span>
+            </div>
+            <div class="chips-container" id="chipsContainer">
+              <button class="preset-chip" data-text="I can't believe we actually won the championship after all this hard work!">
+                <span class="chip-emoji">😄</span> Joy & Triumph
+              </button>
+              <button class="preset-chip" data-text="Every corner of this empty house reminds me of the memories we will never make again.">
+                <span class="chip-emoji">😢</span> Heartbreak & Sadness
+              </button>
+              <button class="preset-chip" data-text="You mean the absolute world to me and I will always cherish you with all my heart.">
+                <span class="chip-emoji">❤️</span> Deep Affection & Love
+              </button>
+              <button class="preset-chip" data-text="This is utterly unacceptable! How dare they cancel our reservations without even notifying us?">
+                <span class="chip-emoji">😡</span> Outrage & Anger
+              </button>
+              <button class="preset-chip" data-text="I hear footsteps slowly creaking upstairs in the dark and my heart is pounding like crazy.">
+                <span class="chip-emoji">😨</span> Dread & Fear
+              </button>
+              <button class="preset-chip" data-text="Wait, what?! I just received an envelope with a full scholarship and flight tickets to Tokyo!">
+                <span class="chip-emoji">😲</span> Pure Surprise
+              </button>
+            </div>
+          </div>
+
+          <!-- Analyze CTA -->
+          <div class="submit-action-wrapper" style="margin-top: 1.5rem;">
+            <button id="analyzeBtn" class="analyze-button">
+              <span class="btn-spinner" id="analyzeSpinner"></span>
+              <span class="btn-icon" id="analyzeIcon">⚡</span>
+              <span class="btn-text-content" id="analyzeBtnText">Analyze Emotion</span>
+            </button>
+            <div class="keyboard-shortcut-hint">
+              <span>Press</span> <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: RESULTS PANEL -->
+      <section class="results-panel">
+
+        <!-- Dominant Mood Spotlight Card -->
+        <div class="dominant-mood-card" id="dominantMoodCard">
+          <div class="card-header-row" style="margin-bottom: 0.8rem;">
+            <div class="card-title-group">
+              <div class="card-icon-tag">🎯</div>
+              <div>
+                <h3>Dominant Sentiment</h3>
+                <span class="card-subtext">Highest activation from the neural softmax layer</span>
+              </div>
+            </div>
+            <button class="mini-action-btn" id="copyResultBtn" title="Copy Analysis Report">
+              📋 Copy
+            </button>
+          </div>
+
+          <div class="dominant-card-inner">
+            <div class="emotion-avatar-pod" id="emotionAvatarPod">
+              <span class="emotion-avatar-emoji" id="dominantEmoji">✨</span>
+            </div>
+
+            <div class="dominant-meta">
+              <span class="dominant-eyebrow">Classified Emotion</span>
+              <h2 class="dominant-name" id="dominantEmotionName">Awaiting Input</h2>
+              <div class="dominant-confidence-row">
+                <span class="confidence-badge" id="confidenceBadge">0.0%</span>
+                <span class="certainty-rating" id="certaintyRating">Ready for prediction</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sentiment Tone Metrics -->
+          <div class="sentiment-tone-bar">
+            <div class="tone-pill">
+              <span class="tone-pill-label">Valence Orientation</span>
+              <span class="tone-pill-val" id="valenceVal">— Neutral</span>
+            </div>
+            <div class="tone-pill">
+              <span class="tone-pill-label">Arousal / Intensity</span>
+              <span class="tone-pill-val" id="arousalVal">— Baseline</span>
+            </div>
+          </div>
+
+          <div class="emotion-narrative-box" id="emotionNarrative">
+            Enter a phrase above and click "Analyze Emotion" to uncover its hidden emotional dimensions, confidence metrics, and linguistic nuances.
+          </div>
+        </div>
+
+        <!-- Emotion Spectrum Breakdown -->
+        <div class="glass-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <div class="card-icon-tag">📊</div>
+              <div>
+                <h3>Probability Distribution</h3>
+                <span class="card-subtext">Calibrated Softmax outputs across all 6 classes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="spectrum-list" id="spectrumList">
+            <!-- Joy -->
+            <div class="spectrum-item" data-emotion="joy">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">😄 Joy</span>
+                <span class="spectrum-percentage" id="prob-joy">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill joy" id="fill-joy"></div>
+              </div>
+            </div>
+
+            <!-- Love -->
+            <div class="spectrum-item" data-emotion="love">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">❤️ Love</span>
+                <span class="spectrum-percentage" id="prob-love">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill love" id="fill-love"></div>
+              </div>
+            </div>
+
+            <!-- Sadness -->
+            <div class="spectrum-item" data-emotion="sadness">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">😢 Sadness</span>
+                <span class="spectrum-percentage" id="prob-sadness">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill sadness" id="fill-sadness"></div>
+              </div>
+            </div>
+
+            <!-- Anger -->
+            <div class="spectrum-item" data-emotion="anger">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">😡 Anger</span>
+                <span class="spectrum-percentage" id="prob-anger">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill anger" id="fill-anger"></div>
+              </div>
+            </div>
+
+            <!-- Fear -->
+            <div class="spectrum-item" data-emotion="fear">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">😨 Fear</span>
+                <span class="spectrum-percentage" id="prob-fear">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill fear" id="fill-fear"></div>
+              </div>
+            </div>
+
+            <!-- Surprise -->
+            <div class="spectrum-item" data-emotion="surprise">
+              <div class="spectrum-info-row">
+                <span class="spectrum-emotion-name">😲 Surprise</span>
+                <span class="spectrum-percentage" id="prob-surprise">0.0%</span>
+              </div>
+              <div class="spectrum-track">
+                <div class="spectrum-fill surprise" id="fill-surprise"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar Canvas -->
+        <div class="glass-card radar-section">
+          <div class="card-header-row" style="width: 100%;">
+            <div class="card-title-group">
+              <div class="card-icon-tag">🕸️</div>
+              <div>
+                <h3>Emotion Polar Radar</h3>
+                <span class="card-subtext">Hexagonal affective state geometry</span>
+              </div>
+            </div>
+          </div>
+          <div class="radar-canvas-frame">
+            <canvas id="emotionRadarCanvas" width="340" height="280"></canvas>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- BOTTOM ROW: ARCHITECTURE & HISTORY -->
+    <section class="bottom-grid">
+      <!-- Architecture Diagnostics -->
+      <div class="glass-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <div class="card-icon-tag">🧠</div>
+            <div>
+              <h3>Neural Architecture Specs</h3>
+              <span class="card-subtext">Bidirectional GRU Model Pipeline Details</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-spec-grid">
+          <div class="tech-spec-item">
+            <span class="tech-spec-title">Network Type</span>
+            <span class="tech-spec-value">BiGRU (Bidirectional)</span>
+            <span class="tech-spec-desc">Captures both forward and backward contextual dependencies</span>
+          </div>
+
+          <div class="tech-spec-item">
+            <span class="tech-spec-title">Sequence Window</span>
+            <span class="tech-spec-value">50 Time Steps</span>
+            <span class="tech-spec-desc">Post-padded & truncated sequence vectors</span>
+          </div>
+
+          <div class="tech-spec-item">
+            <span class="tech-spec-title">Classifier Output</span>
+            <span class="tech-spec-value">6-Class Softmax</span>
+            <span class="tech-spec-desc">Normalizes outputs into true probability distributions</span>
+          </div>
+
+          <div class="tech-spec-item">
+            <span class="tech-spec-title">Inference Engine</span>
+            <span class="tech-spec-value" id="latencyStat">FastAPI / Keras</span>
+            <span class="tech-spec-desc">Sub-millisecond localized sequence inference</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent History Log -->
+      <div class="glass-card">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <div class="card-icon-tag">🕒</div>
+            <div>
+              <h3>Analysis History</h3>
+              <span class="card-subtext">Stored locally in your browser session</span>
+            </div>
+          </div>
+          <button class="mini-action-btn" id="clearHistoryBtn" title="Clear History Log">
+            Clear
+          </button>
+        </div>
+
+        <div id="historyListContainer">
+          <div class="history-empty-state" id="historyEmptyState">
+            No analyses recorded yet. Try running an emotion prediction above!
+          </div>
+          <div class="history-list" id="historyList" style="display: none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer" role="contentinfo">
+      <div>
+        <strong>Moodify AI</strong> — Powered by Deep Learning NLP & BiGRU Neural Networks.
+      </div>
+      <div class="footer-links">
+        <a href="/docs" target="_blank" class="footer-link">API Swagger</a>
+        <a href="/health" target="_blank" class="footer-link">Health Status</a>
+        <a href="https://github.com/Deynn0/Moodify" target="_blank" class="footer-link">GitHub Repository</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- App Script -->
+  <script src="/static/app.js"></script>
 </body>
 
 </html>
